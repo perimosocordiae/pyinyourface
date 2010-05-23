@@ -23,7 +23,8 @@ class DistributedTrainer(Trainer):
 		patches,offsets = self.get_patches(f)
 		patches.dump("patches_%d.npz"%f)
 		offsets.dump("offsets_%d.npz"%f)
-		return Popen('echo "python boost_feature.py %d %d" | qsub -cwd -N boost_%d'%(f,self.haars_per_feat,f),shell=True)
+		# for submitting to cluster with qsub:
+		return Popen('echo "python boost_feature.py %d %d" | qsub -cwd -N boost_%d -v PATH -v LD_LIBRARY_PATH -v PYTHONPATH'%(f,self.haars_per_feat,f),shell=True)
 		#return Popen(['./boost_feature.py',str(f),str(self.haars_per_feat)])
 
 	def __read_locator(self,idx):
